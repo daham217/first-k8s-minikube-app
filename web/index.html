@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>K8s App</title>
+  <style>
+    body { font-family: monospace; background: #0d0d0d; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    h1 { color: #00e5ff; }
+    pre { background: #1a1a1a; padding: 1rem 2rem; border-radius: 6px; border: 1px solid #333; }
+    .status-ok { color: #00e676; }
+    .status-err { color: #ff1744; }
+  </style>
+</head>
+<body>
+  <h1>Minikube K8s App</h1>
+  <p>API Health Check</p>
+  <pre id="output">Fetching...</pre>
+
+  <script>
+    async function checkHealth() {
+      const output = document.getElementById("output");
+      try {
+        const res = await fetch("/api/health");
+        const data = await res.json();
+        output.classList.add("status-ok");
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.classList.add("status-err");
+        output.textContent = "Error: " + err.message;
+      }
+    }
+
+    checkHealth();
+    setInterval(checkHealth, 5000);
+  </script>
+</body>
+</html>
